@@ -67,7 +67,7 @@ namespace Hextant
             EditorGUI.BeginDisabledGroup(!this.IsBackEnabled());
 
             var leftArrowCode = "\u2190";
-            if (GUILayout.Button(leftArrowCode, GUILayout.MinWidth(35)))
+            if( GUILayout.Button(leftArrowCode, GUILayout.MinWidth(35)) )
             {
                 this.MoveSelectionBack();
             }
@@ -99,7 +99,7 @@ namespace Hextant
             EditorGUI.BeginDisabledGroup(!this.IsForwardEnabled());
 
             var rightArrowCode = "\u2192";
-            if (GUILayout.Button(rightArrowCode, GUILayout.MinWidth(35)))
+            if( GUILayout.Button(rightArrowCode, GUILayout.MinWidth(35)) )
             {
                 this.MoveSelectionForward();
             }
@@ -116,7 +116,7 @@ namespace Hextant
 
         private void MoveSelectionBack()
         {
-            if ( this.IsBackEnabled() )
+            if( this.IsBackEnabled() )
             {
                 SelectionHistory.instance.Back();
             }
@@ -129,7 +129,7 @@ namespace Hextant
 
         private void MoveSelectionForward()
         {
-            if ( this.IsForwardEnabled() )
+            if( this.IsForwardEnabled() )
             {
                 SelectionHistory.instance.Forward();
             }
@@ -137,7 +137,19 @@ namespace Hextant
 
         private string GetNameForSelectionObjects(Object[] objects)
         {
-            return (objects != null && objects.Length > 0) ? objects[0].name : string.Empty;
+            if( objects == null || objects.Length == 0)
+            {
+                return string.Empty;
+            }
+
+            var label = objects[0].name;
+
+            if( objects.Length > 1)
+            {
+                label += $" [+{objects.Length - 1}]";
+            }
+
+            return label;
         }
     }
 }
