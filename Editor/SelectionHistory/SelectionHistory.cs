@@ -62,13 +62,13 @@ namespace Hextant.Editor
         // Does the selection history have previous entries to current?
         public bool HasPreviousEntries()
         {
-            return _currentIndex > 0;
+            return _currentIndex > 0 && _history.Count > 1;
         }
 
         // Does the selection history have newer entries than current?
         public bool HasNewerEntries()
         {
-            return _currentIndex < _history.Count - 1;
+            return _currentIndex >= 0 && _currentIndex < _history.Count - 1;
         }
 
         // Get the previously selected Objects in the history
@@ -81,6 +81,13 @@ namespace Hextant.Editor
         public Object[] GetNewerObjects()
         {
             return HasNewerEntries() ? _history[_currentIndex + 1] : null;
+        }
+
+        // Clear the history
+        public void Clear()
+        {
+            _currentIndex = -1;
+            _history.Clear();
         }
 
         // Adds the specified objects entry to the history.

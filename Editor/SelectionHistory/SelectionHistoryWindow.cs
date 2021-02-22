@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Hextant
 {
-    public class SelectionHistoryWindow : EditorWindow
+    public class SelectionHistoryWindow : EditorWindow, IHasCustomMenu
     {
         private GUIStyle _previousLabelStyle;
         private GUIStyle _nextLabelStyle;
@@ -38,6 +38,18 @@ namespace Hextant
             }
         }
 
+        /// <summary>
+        /// Implements IHasCutomMenu callback to add items into the right click menu and context menu on the window.
+        /// </summary>
+        /// <param name="menu">Menu to add into.</param>
+        public virtual void AddItemsToMenu(GenericMenu menu)
+        {
+            menu.AddItem(
+                new GUIContent("Clear History"),
+                false,
+                new GenericMenu.MenuFunction(SelectionHistory.instance.Clear));
+        }
+
         [MenuItem("Window/SelectionHistory")]
         private static SelectionHistoryWindow OpenSelectionHistoryWindow()
         { 
@@ -64,12 +76,12 @@ namespace Hextant
         {
             EditorGUILayout.BeginHorizontal();
 
-            EditorGUI.BeginDisabledGroup(!this.IsBackEnabled());
+            EditorGUI.BeginDisabledGroup(!SelectionHistory.instance.HasPreviousEntries());
 
             var leftArrowCode = "\u2190";
             if( GUILayout.Button(leftArrowCode, GUILayout.MinWidth(35)) )
             {
-                this.MoveSelectionBack();
+                SelectionHistory.instance.Back();
             }
 
             EditorGUI.EndDisabledGroup();
@@ -96,43 +108,17 @@ namespace Hextant
                     GUILayout.ExpandWidth(true));
             }
 
-            EditorGUI.BeginDisabledGroup(!this.IsForwardEnabled());
+            EditorGUI.BeginDisabledGroup(!SelectionHistory.instance.HasNewerEntries());
 
             var rightArrowCode = "\u2192";
             if( GUILayout.Button(rightArrowCode, GUILayout.MinWidth(35)) )
             {
-                this.MoveSelectionForward();
+                SelectionHistory.instance.Forward();
             }
 
             EditorGUI.EndDisabledGroup();
 
             EditorGUILayout.EndHorizontal();
-        }
-
-        private bool IsBackEnabled()
-        {
-            return SelectionHistory.instance.HasPreviousEntries();
-        }
-
-        private void MoveSelectionBack()
-        {
-            if( this.IsBackEnabled() )
-            {
-                SelectionHistory.instance.Back();
-            }
-        }
-
-        private bool IsForwardEnabled()
-        {
-            return SelectionHistory.instance.HasNewerEntries();
-        }
-
-        private void MoveSelectionForward()
-        {
-            if( this.IsForwardEnabled() )
-            {
-                SelectionHistory.instance.Forward();
-            }
         }
 
         private string GetNameForSelectionObjects(Object[] objects)
