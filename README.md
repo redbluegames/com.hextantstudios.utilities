@@ -2,6 +2,9 @@
 
 This repository contains a collection of helpful runtime and editor classes for Unity. 
 
+This fork by Red Blue Games adds a GUI. It modifies SelectionHistory to expose its state as needed
+for the GUI.
+
 ## Package Manager Installation
 
 It can be installed from Unity's *Package Manager* using the following Git URL:
