@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Hextant
+namespace Hextant.Editor
 {
     public class SelectionHistoryWindow : EditorWindow, IHasCustomMenu
     {
